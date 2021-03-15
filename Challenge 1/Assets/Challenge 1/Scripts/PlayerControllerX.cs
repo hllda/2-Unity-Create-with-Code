@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PlayerControllerX : MonoBehaviour
 {
-    private GameObject focalPoint;
-    public Rigidbody playerRb;
     public float speed;
     public float rotationSpeed;
     public float verticalInput;
@@ -13,8 +11,7 @@ public class PlayerControllerX : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerRb = GetComponent<Rigidbody>();
-        focalPoint = GameObject.Find("Propellor");
+
     }
 
     // Update is called once per frame
@@ -24,8 +21,7 @@ public class PlayerControllerX : MonoBehaviour
         verticalInput = Input.GetAxis("Vertical");
 
         // move the plane forward at a constant rate
-
-        playerRb.AddForce(focalPoint.transform.forward * speed * 1);
+        transform.Translate(Vector3.forward * speed);
 
         // tilt the plane up/down based on up/down arrow keys
         transform.Rotate(Vector3.left * rotationSpeed * verticalInput);
