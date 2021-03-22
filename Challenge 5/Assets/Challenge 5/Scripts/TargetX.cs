@@ -9,21 +9,20 @@ public class TargetX : MonoBehaviour
     public int pointValue;
     public GameObject explosionFx;
 
-    public float timeOnScreen = 1.0f;
-
+    public float timeOnScreen;
     private float minValueX = -3.75f; // the x value of the center of the left-most square
     private float minValueY = -3.75f; // the y value of the center of the bottom-most square
     private float spaceBetweenSquares = 2.5f; // the distance between the centers of squares on the game board
-    
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         gameManagerX = GameObject.Find("Game Manager").GetComponent<GameManagerX>();
 
+        timeOnScreen = 4 - gameManagerX.difficultyScreen;
+
         transform.position = RandomSpawnPosition(); 
         StartCoroutine(RemoveObjectRoutine()); // begin timer before target leaves screen
-
     }
 
     // When target is clicked, destroy it, update score, and generate explosion
@@ -83,5 +82,4 @@ public class TargetX : MonoBehaviour
         }
 
     }
-
 }

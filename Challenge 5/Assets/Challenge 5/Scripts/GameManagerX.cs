@@ -17,29 +17,33 @@ public class GameManagerX : MonoBehaviour
     public List<GameObject> targetPrefabs;
 
     private int time = 60;
-    private int score;
-    private float spawnRate = 1.5f;
+    private int score = 0;
+    private float spawnRate = 2f;
     public bool isGameActive;  
+
+    public int difficultyScreen;
 
     private float spaceBetweenSquares = 2.5f; 
     private float minValueX = -3.75f; //  x value of the center of the left-most square
     private float minValueY = -3.75f; //  y value of the center of the bottom-most square
     
     // Start the game, remove title screen, reset score, and adjust spawnRate based on difficulty button clicked
-    public void StartGame()
+    public void StartGame(int difficulty)
     {
-        spawnRate /= 5;
+        difficultyScreen = difficulty;
+        spawnRate /= difficulty;
         isGameActive = true;
 
         StartCoroutine(SpawnTarget());
-        score = 0;
         UpdateScore(0);
         titleScreen.SetActive(false);
+
+        InvokeRepeating("UpdateTime", 1.0f, 1.0f);
     }
 
     public void Update()
     {
-        UpdateTime(time);
+        scoreText.text = "Score: " + score;
         timerText.text = "Time: " + time;
     }
 
@@ -78,18 +82,32 @@ public class GameManagerX : MonoBehaviour
     public void UpdateScore(int scoreToAdd)
     {
         score += scoreToAdd;
+
+        if(score < 0)
+        {
+            score = 0;
+        }
+
         scoreText.text = "Score: " + score;
     }
 
-    IEnumerator UpdateTime(int time)
+    public void UpdateTime()
     {
-        time--;
-        yield return new WaitForSeconds(1);
+        if (time > 0)
+        {
+            time--;
+        }
+
+        if (time <= 0)
+        {
+            GameOver();
+        }
     }
 
     // Stop game, bring up game over text and restart button
     public void GameOver()
     {
+        CancelInvoke("UpdateTime");
         gameOverScreen.gameObject.SetActive(true);
         isGameActive = false;
     }
@@ -99,4 +117,7 @@ public class GameManagerX : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+  
+
 }

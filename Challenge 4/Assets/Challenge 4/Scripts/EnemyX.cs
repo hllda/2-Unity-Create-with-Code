@@ -4,23 +4,24 @@ using UnityEngine;
 
 public class EnemyX : MonoBehaviour
 {
-    public float speed;
+    public int speed;
     private Rigidbody enemyRb;
     private GameObject playerGoal;
 
-    //public SpawnManagerX spawnManager;
+    private SpawnManagerX spawnManagerX;
 
     // Start is called before the first frame update
     void Start()
     {
         enemyRb = GetComponent<Rigidbody>();
         playerGoal = GameObject.Find("Player Goal");
+        spawnManagerX = GameObject.Find("Spawn Manager").GetComponent<SpawnManagerX>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //speed =  spawnManager.waveCount;
+        speed = (spawnManagerX.waveCount * 5) + 5;
         
         // Set enemy direction towards player goal and move there
         Vector3 lookDirection = (playerGoal.transform.position - transform.position).normalized;
@@ -33,7 +34,7 @@ public class EnemyX : MonoBehaviour
         if (other.gameObject.name == "Enemy Goal")
         {
             Destroy(gameObject);
-        } 
+        }
         else if (other.gameObject.name == "Player Goal")
         {
             Destroy(gameObject);
